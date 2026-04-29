@@ -1,0 +1,30 @@
+name: CI com Testes e Alerta
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  testes:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instalar pytest
+        run: pip install pytest
+
+      - name: Rodar todos os testes
+        run: pytest
+
+      - name: Enviar ALERTA (simulado no log)
+        if: always()
+        run: |
+          echo "========================================="
+          echo "🔔 ALERTA: Workflow concluído com status ${{ job.status }}"
+          echo "Repositório: ${{ github.repository }}"
+          echo "Evento: ${{ github.event_name }}"
+          echo "Link da execução: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          echo "========================================="
